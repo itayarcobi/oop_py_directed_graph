@@ -16,7 +16,6 @@ class GraphAlgo(GraphAlgoInterface, ABC):
             self.graph = gr
         self.qp = heapq
 
-
     def get_graph(self) -> GraphInterface:
         return self.graph
 
@@ -30,7 +29,7 @@ class GraphAlgo(GraphAlgoInterface, ABC):
                 for i in range(len(my_node)):
                     j = my_node[i]
                     id = j["id"]
-                    pos=None
+                    pos = None
                     if j.get("pos") is not None:
                         pos = j["pos"]
                     gl.add_node(id, pos)
@@ -63,7 +62,7 @@ class GraphAlgo(GraphAlgoInterface, ABC):
         save_dict["Nodes"] = Nodes
         try:
             with open(file_name, "w") as file:
-                json.dump(save_dict, default=lambda n: n._dict_, indent=4, fp=file)
+                json.dump(save_dict, default=lambda n: n.__dict__, indent=4, fp=file)
                 return True
         except IOError as e:
             print(e)
@@ -74,7 +73,7 @@ class GraphAlgo(GraphAlgoInterface, ABC):
             keys.set_weight(float('inf'))
         nodes = self.get_graph().get_all_v()
         if nodes.get(id1) is None or nodes.get(id2) is None:
-            return float('inf'),[]
+            return float('inf'), []
         nodes[id1].set_weight(0)
         heap = []
         heapq.heappush(heap, (nodes[id1].get_weight(), nodes[id1]))
@@ -83,7 +82,7 @@ class GraphAlgo(GraphAlgoInterface, ABC):
             for key, w in self.get_graph().all_out_edges_of_node(curr_node.get_key()).items():
                 if nodes[key].get_weight() > w + curr_node.get_weight():
                     nodes[key].set_weight(w + curr_node.get_weight())
-                    heapq.heappush(heap, (nodes[key].get_weight(),nodes[key]))
+                    heapq.heappush(heap, (nodes[key].get_weight(), nodes[key]))
         curr_node = nodes[id2]
         if curr_node.get_weight() == float('inf'):
             return float('inf'), []
@@ -92,7 +91,7 @@ class GraphAlgo(GraphAlgoInterface, ABC):
         while curr_node.get_weight() != 0:
             for key, w in self.get_graph().all_in_edges_of_node(curr_node.get_key()).items():
                 if nodes[key].get_weight() + w == curr_node.get_weight():
-                    list.insert(0,key)
+                    list.insert(0, key)
                     curr_node = nodes[key]
         return ans, list
 

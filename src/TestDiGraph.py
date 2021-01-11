@@ -69,6 +69,8 @@ class TestDiGraph(TestCase):
         self.assertEqual(self.g.e_size(), 11)
         self.g.add_edge(5, 9, 5.9)
         self.assertEqual(self.g.e_size(), 11)
+        self.assertFalse(self.g.add_edge(11, 9, 5))
+        self.assertFalse(self.g.add_edge(3, 1, -5))
 
     def test_add_node(self):
         self.assertEqual(len(self.g.get_all_v()), 10)
