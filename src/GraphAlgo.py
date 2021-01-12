@@ -148,15 +148,25 @@ class GraphAlgo(GraphAlgoInterface, ABC):
         return list2
 
     def plot_graph(self) -> None:
+        for npn in self.graph.get_all_v().values():
+            if npn.get_pos() is None:
+                npn.set_pos([npn.get_key(), npn.get_key()])
+
         fig, ax = plt.subplots()
         for i in self.graph.get_all_v().values():
             np = i.get_pos()
             nid = i.get_key()
+            # if np is None:
+            #     np= (nid,nid)
             # plt.plot(x[0], x[1], "o")
-            ax.scatter(np[0], np[1])
+            ax.scatter(np[0], np[1], color="r", zorder=10)
             ax.annotate(nid, (np[0], np[1]))
             # for ed in self._g0.all_out_edges_of_node(i):
-            plt.plot(np[0], np[1])
+            for ed in self.graph.all_out_edges_of_node(i.get_key()):
+                nie = self.graph.get_node(ed)
+                niepos = nie.get_pos()
+                plt.plot([np[0], niepos[0]], [np[1], niepos[1]], linestyle='solid', color="g")
+                # plt.axline(np, niepos)
 
         plt.xlabel("x axis ")
         plt.ylabel("y axis ")

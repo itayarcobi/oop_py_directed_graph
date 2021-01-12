@@ -1,6 +1,5 @@
 from DiGraph import DiGraph
-# from GraphAlgo import GraphAlgo
-from src.src.GraphAlgo import GraphAlgo
+from GraphAlgo import GraphAlgo
 
 
 def check():
@@ -39,27 +38,11 @@ def check0():
     g.add_edge(2, 3, 1.1)
     g.add_edge(1, 3, 1.9)
     g.remove_edge(1, 3)
-    print("after remove out -src:",g.all_out_edges_of_node(1))
-    print("after remove in-dest",g.all_in_edges_of_node(3))
-    # print(g.all_out_edges_of_node(1))
     g.add_edge(1, 3, 10)
     print(g)  # prints the __repr__ (func output)
     print(g.get_all_v())  # prints a dict with all the graph's vertices.
     print(g.all_in_edges_of_node(1))
-
-    print("before remove node")
     print(g.all_out_edges_of_node(1))
-    print(g.all_in_edges_of_node(3))
-    g.remove_node(1)
-    print("after remove node")
-    print("dist_src", g.all_out_edges_of_node(1))
-    print("dist_dest",g.all_in_edges_of_node(3))
-    print(g.all_out_edges_of_node(2))
-    g.remove_edge(2,3)
-    print(g.all_out_edges_of_node(2))
-    print(g.get_mc())
-    print(g.e_size())
-
     g_algo = GraphAlgo(g)
     print(g_algo.shortest_path(0, 3))
     g_algo.plot_graph()
