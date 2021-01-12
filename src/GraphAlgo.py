@@ -2,6 +2,7 @@ import heapq
 import matplotlib.pyplot as plt
 import json
 from abc import ABC
+import random
 
 from src.src.GraphAlgoInterface import GraphAlgoInterface
 from src.src.DiGraph import DiGraph
@@ -19,6 +20,7 @@ class GraphAlgo(GraphAlgoInterface, ABC):
     """
            return the directed graph on which the algorithm works on
        """
+
     def get_graph(self) -> GraphInterface:
         return self.graph
 
@@ -29,6 +31,7 @@ class GraphAlgo(GraphAlgoInterface, ABC):
         load and open json file According to the specific format we received in the data folder
         so we can work and use the loaded graph
         """
+
     def load_from_json(self, file_name: str) -> bool:
         gl = DiGraph()
         try:
@@ -57,6 +60,7 @@ class GraphAlgo(GraphAlgoInterface, ABC):
 
     """Saves the graph in JSON format to a file file_name: The path to the out file True if the save was successful, 
     False o.w. save to json file According to the specific format we received in the data folder """
+
     def save_to_json(self, file_name: str, ) -> bool:
         save_dict = dict()
         Nodes = []
@@ -84,6 +88,7 @@ class GraphAlgo(GraphAlgoInterface, ABC):
     end node id Return The distance of the path, a list of the nodes ids that the path goes through In this function 
     we find the shortest trajectory between two vertices in a graph. 
     """
+
     def shortest_path(self, id1: int, id2: int) -> (float, list):
         for keys in self.get_graph().get_all_v().values():
             keys.set_weight(float('inf'))
@@ -115,6 +120,7 @@ class GraphAlgo(GraphAlgoInterface, ABC):
     nodes in the SCC We find the binding element of a particular vertex.A binding component is all the vertices I can 
     reach and they too can reach me. 
     """
+
     def connected_component(self, id1: int) -> list:
         nodes = self.get_graph().get_all_v()
         for keys, t in nodes.items():
@@ -158,6 +164,7 @@ class GraphAlgo(GraphAlgoInterface, ABC):
         Return The list all SCC
         We will perform connected_component on the whole graph.
         """
+
     def connected_components(self) -> list:
         nodes = self.get_graph().get_all_v()
         list2 = []
@@ -171,25 +178,71 @@ class GraphAlgo(GraphAlgoInterface, ABC):
                     if key == key_in:
                         nodes_keys.remove(key_in)
         return list2
+
     """
         Plots the graph.
         If the nodes have a position, the nodes will be placed there.
         Otherwise, they will be placed in a random but elegant manner this function uses matplotlib functions
     """
+
     def plot_graph(self) -> None:
+        node_lis = []
+        x_lis = []
+        y_lis = []
+        counter = 0
         for npn in self.graph.get_all_v().values():
             if npn.get_pos() is None:
-                npn.set_pos([npn.get_key(), npn.get_key()])
+                counter += 1
+                node_lis.append(npn)
+            else:
+                x_lis.append(npn.get_pos()[0])
+                y_lis.append(npn.get_pos()[1])
+        if counter == len(self.graph.get_all_v()):
+            self.set_plot_loc(x_min=35, x_max=36, y_min=35, y_max=36, node_lis=node_lis)
+        elif len(node_lis) > 0:
+            x_max = -float('inf')
+            x_min = float('inf')
+            y_max = -float('inf')
+            y_min = float('inf')
+            for x in x_lis:
+                if not isinstance(x, int):
+                    if x.get_pos()[0] < x_min:
+                        x_min = x.get_pos()[0]
+                    elif x.get_pos()[0] > x_max:
+                        x_max = x.get_pos()[0]
+                # else:
+                #     if x < x_min:
+                #         x_min = x
+                #     elif x > x_max:
+                #         x_max = x
+            for y in y_lis:
+                if not isinstance(y, int):
+                    if y.get_pos()[1] < y_min:
+                        y_min = y.get_pos()[0]
+                    elif y.get_pos()[1] > y_max:
+                        y_max = y.get_pos()[1]
+                # else:
+                #     if y < y_min:
+                #         y_min = y
+                #     elif y > y_max:
+                #         y_max = y
+
+            self.set_plot_loc(x_min=x_min, x_max=x_max, y_min=y_min, y_max=y_max, node_lis=node_lis)
+
         fig, ax = plt.subplots()
+        x_lis = []
+        y_lis = []
         for i in self.graph.get_all_v().values():
             np = i.get_pos()
-            nid = i.get_key()
             ax.scatter(np[0], np[1], color="r", zorder=10)
-            ax.annotate(nid, (np[0], np[1]))
-            for ed in self.graph.all_out_edges_of_node(i.get_key()):
-                nie = self.graph.get_node(ed)
-                niepos = nie.get_pos()
-                plt.plot([np[0], niepos[0]], [np[1], niepos[1]], linestyle='solid', color="g")
+            # ax.annotate(i.get_key(), np[0], np[1])
+        for src in self.graph.get_all_v():
+            for dest in self.graph.all_out_edges_of_node(src):
+                x1 = self.graph.get_node(src).get_pos()[0]
+                x2 = self.graph.get_node(dest).get_pos()[0]
+                y1 = self.graph.get_node(src).get_pos()[1]
+                y2 = self.graph.get_node(dest).get_pos()[1]
+                plt.plot([x1, x2], [y1, y2])
 
         plt.xlabel("x axis ")
         plt.ylabel("y axis ")
@@ -198,9 +251,10 @@ class GraphAlgo(GraphAlgoInterface, ABC):
 
         pass
 
-    def none_pos_nodes(self) -> list:
-        none_list = []
-        for i in self.graph.get_all_v().values():
-            if i.get_pos is None:
-                none_list.append(i)
-        return none_list
+    def set_plot_loc(self, x_min, x_max, y_min, y_max, node_lis):
+
+        for node in node_lis:
+            rand_x = (random.random() * (x_max - x_min)) + x_min + 0.000001
+            rand_y = (random.random() * (y_max - y_min)) + y_min + 0.000001
+            print(rand_y)
+            node.set_pos((rand_x, rand_y, 0))

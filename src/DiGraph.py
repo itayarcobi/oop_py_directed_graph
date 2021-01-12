@@ -146,4 +146,4 @@ class DiGraph(GraphInterface, ABC):
     """
 
     def get_node(self, node_id) -> NodeData:
-        return self._graph[node_id]
+        return self._graph.get(node_id)

@@ -8,11 +8,8 @@ class NodeData:
         self.weight = weight
         # print(kwargs)
 
-    # def __repr__(self):
-    #     return '{"pos" =%s,"id"=%d}' % (self.pos, self.key)
     def __repr__(self):
-        return str(self.weight)
-
+        return '{"pos" =%s,"id"=%d}' % (self.pos, self.key)
     """
     return the key node (node_id)
      """
