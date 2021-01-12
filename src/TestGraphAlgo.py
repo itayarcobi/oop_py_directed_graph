@@ -15,12 +15,17 @@ class TestGraphAlgo(TestCase):
         self.g.add_edge(1, 2, 1.2)
         self.g.add_edge(2, 3, 2.3)
         self.g.add_edge(5, 3, 5.3)
-        self.g.add_edge(1, 9, 1.9)
+        self.g.add_edge(1, 9, 19)
         self.g.add_edge(6, 7, 6.7)
+        self.g.add_edge(6, 0, 0.6)
+        self.g.add_edge(0, 4, 1)
+        self.g.add_edge(4, 5, 3)
+        self.g.add_edge(5, 7, 1.5)
         self.g.add_edge(1, 3, 1.3)
         self.g.add_edge(4, 3, 4.3)
         self.g.add_edge(4, 1, 0.4)
         self.g.add_edge(9, 0, 90)
+        self.g.add_edge(0, 9, 5)
 
         self.g0 = GraphAlgo(self.g)
         self.g0.get_graph()
@@ -33,7 +38,9 @@ class TestGraphAlgo(TestCase):
 
     def test_shortest_path(self):
         self.assertEqual(self.g0.shortest_path(0, 1)[0], 1)
-        self.assertEqual(self.g0.shortest_path(4, 3)[0], 1.7)
+        # self.assertEqual(self.g0.shortest_path(1, 9)[0], 15)
+        # self.assertEqual(self.g0.shortest_path(6, 7)[0], 6.1)
+        # self.assertEqual(self.g0.shortest_path(6,7)[1],[6,0,4,5,7])
 
     def test_connected_component(self):
         self.assertEqual(len(self.g0.connected_component(1)), 3)

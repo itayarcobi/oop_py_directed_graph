@@ -16,9 +16,19 @@ class GraphAlgo(GraphAlgoInterface, ABC):
             self.graph = gr
         self.qp = heapq
 
+    """
+           return the directed graph on which the algorithm works on
+       """
     def get_graph(self) -> GraphInterface:
         return self.graph
 
+    """
+        Loads a graph from a json file.
+        file_name: The path to the json file
+        True if the loading was successful, False o.w.
+        load and open json file According to the specific format we received in the data folder
+        so we can work and use the loaded graph
+        """
     def load_from_json(self, file_name: str) -> bool:
         gl = DiGraph()
         try:
@@ -45,6 +55,8 @@ class GraphAlgo(GraphAlgoInterface, ABC):
             print(e)
             return False
 
+    """Saves the graph in JSON format to a file file_name: The path to the out file True if the save was successful, 
+    False o.w. save to json file According to the specific format we received in the data folder """
     def save_to_json(self, file_name: str, ) -> bool:
         save_dict = dict()
         Nodes = []
@@ -68,6 +80,12 @@ class GraphAlgo(GraphAlgoInterface, ABC):
             print(e)
             return False
 
+    """
+        Returns the shortest path from node id1 to node id2 using Dijkstra's Algorithm
+        id1: The start node id
+        id2: The end node id
+        Return The distance of the path, a list of the nodes ids that the path goes through
+        """
     def shortest_path(self, id1: int, id2: int) -> (float, list):
         for keys in self.get_graph().get_all_v().values():
             keys.set_weight(float('inf'))
@@ -95,6 +113,11 @@ class GraphAlgo(GraphAlgoInterface, ABC):
                     curr_node = nodes[key]
         return ans, list
 
+    """
+        Finds the Strongly Connected Component(SCC) that node id1 is a part of.
+        id1: The node id
+        Return The list of nodes in the SCC
+       """
     def connected_component(self, id1: int) -> list:
         nodes = self.get_graph().get_all_v()
         for keys, t in nodes.items():
@@ -133,6 +156,10 @@ class GraphAlgo(GraphAlgoInterface, ABC):
 
         return sorted(list5)
 
+    """
+        Finds all the Strongly Connected Component(SCC) in the graph.
+        Return The list all SCC
+        """
     def connected_components(self) -> list:
         nodes = self.get_graph().get_all_v()
         list2 = []
@@ -146,27 +173,25 @@ class GraphAlgo(GraphAlgoInterface, ABC):
                     if key == key_in:
                         nodes_keys.remove(key_in)
         return list2
-
+    """
+        Plots the graph.
+        If the nodes have a position, the nodes will be placed there.
+        Otherwise, they will be placed in a random but elegant manner
+    """
     def plot_graph(self) -> None:
         for npn in self.graph.get_all_v().values():
             if npn.get_pos() is None:
                 npn.set_pos([npn.get_key(), npn.get_key()])
-
         fig, ax = plt.subplots()
         for i in self.graph.get_all_v().values():
             np = i.get_pos()
             nid = i.get_key()
-            # if np is None:
-            #     np= (nid,nid)
-            # plt.plot(x[0], x[1], "o")
             ax.scatter(np[0], np[1], color="r", zorder=10)
             ax.annotate(nid, (np[0], np[1]))
-            # for ed in self._g0.all_out_edges_of_node(i):
             for ed in self.graph.all_out_edges_of_node(i.get_key()):
                 nie = self.graph.get_node(ed)
                 niepos = nie.get_pos()
                 plt.plot([np[0], niepos[0]], [np[1], niepos[1]], linestyle='solid', color="g")
-                # plt.axline(np, niepos)
 
         plt.xlabel("x axis ")
         plt.ylabel("y axis ")
@@ -174,6 +199,15 @@ class GraphAlgo(GraphAlgoInterface, ABC):
         plt.show()
 
         pass
+
+    def none_pos_nodes(self) -> list:
+        none_list = []
+        for i in self.graph.get_all_v().values():
+            if i.get_pos is None:
+                none_list.append(i)
+        return none_list
+
+
     #
     # def regraph(self) -> GraphInterface:
     #     g1 = DiGraph()
