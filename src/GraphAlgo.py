@@ -80,12 +80,10 @@ class GraphAlgo(GraphAlgoInterface, ABC):
             print(e)
             return False
 
+    """Returns the shortest path from node id1 to node id2 using Dijkstra's Algorithm id1: The start node id id2: The 
+    end node id Return The distance of the path, a list of the nodes ids that the path goes through In this function 
+    we find the shortest trajectory between two vertices in a graph. 
     """
-        Returns the shortest path from node id1 to node id2 using Dijkstra's Algorithm
-        id1: The start node id
-        id2: The end node id
-        Return The distance of the path, a list of the nodes ids that the path goes through
-        """
     def shortest_path(self, id1: int, id2: int) -> (float, list):
         for keys in self.get_graph().get_all_v().values():
             keys.set_weight(float('inf'))
@@ -113,11 +111,10 @@ class GraphAlgo(GraphAlgoInterface, ABC):
                     curr_node = nodes[key]
         return ans, list
 
+    """Finds the Strongly Connected Component(SCC) that node id1 is a part of. id1: The node id Return The list of 
+    nodes in the SCC We find the binding element of a particular vertex.A binding component is all the vertices I can 
+    reach and they too can reach me. 
     """
-        Finds the Strongly Connected Component(SCC) that node id1 is a part of.
-        id1: The node id
-        Return The list of nodes in the SCC
-       """
     def connected_component(self, id1: int) -> list:
         nodes = self.get_graph().get_all_v()
         for keys, t in nodes.items():
@@ -159,6 +156,7 @@ class GraphAlgo(GraphAlgoInterface, ABC):
     """
         Finds all the Strongly Connected Component(SCC) in the graph.
         Return The list all SCC
+        We will perform connected_component on the whole graph.
         """
     def connected_components(self) -> list:
         nodes = self.get_graph().get_all_v()
@@ -176,7 +174,7 @@ class GraphAlgo(GraphAlgoInterface, ABC):
     """
         Plots the graph.
         If the nodes have a position, the nodes will be placed there.
-        Otherwise, they will be placed in a random but elegant manner
+        Otherwise, they will be placed in a random but elegant manner this function uses matplotlib functions
     """
     def plot_graph(self) -> None:
         for npn in self.graph.get_all_v().values():
@@ -206,12 +204,3 @@ class GraphAlgo(GraphAlgoInterface, ABC):
             if i.get_pos is None:
                 none_list.append(i)
         return none_list
-
-
-    #
-    # def regraph(self) -> GraphInterface:
-    #     g1 = DiGraph()
-    #     for i in self._g0.get_all_v():
-    #         g1.add_node(i)
-    #     print(g1)
-    #     return g1
