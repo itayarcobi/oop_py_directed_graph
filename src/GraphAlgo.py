@@ -219,8 +219,6 @@ class GraphAlgo(GraphAlgoInterface, ABC):
             self.set_plot_loc(x_min=x_min, x_max=x_max, y_min=y_min, y_max=y_max, node_lis=node_lis)
 
         fig, ax = plt.subplots()
-        x_lis = []
-        y_lis = []
         for i in self.graph.get_all_v().values():
             np = i.get_pos()
             nid= i.get_key()
@@ -246,5 +244,4 @@ class GraphAlgo(GraphAlgoInterface, ABC):
         for node in node_lis:
             rand_x = (random.random() * (x_max - x_min)) + x_min + 0.000001
             rand_y = (random.random() * (y_max - y_min)) + y_min + 0.000001
-            print(rand_y)
             node.set_pos((rand_x, rand_y, 0))
