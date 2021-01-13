@@ -205,27 +205,16 @@ class GraphAlgo(GraphAlgoInterface, ABC):
             y_max = -float('inf')
             y_min = float('inf')
             for x in x_lis:
-                if not isinstance(x, int):
-                    if x.get_pos()[0] < x_min:
-                        x_min = x.get_pos()[0]
-                    elif x.get_pos()[0] > x_max:
-                        x_max = x.get_pos()[0]
-                # else:
-                #     if x < x_min:
-                #         x_min = x
-                #     elif x > x_max:
-                #         x_max = x
+                if x < x_min:
+                    x_min = x
+                elif x > x_max:
+                    x_max = x
+
             for y in y_lis:
-                if not isinstance(y, int):
-                    if y.get_pos()[1] < y_min:
-                        y_min = y.get_pos()[0]
-                    elif y.get_pos()[1] > y_max:
-                        y_max = y.get_pos()[1]
-                # else:
-                #     if y < y_min:
-                #         y_min = y
-                #     elif y > y_max:
-                #         y_max = y
+                if y < y_min:
+                    y_min = y
+                elif y > y_max:
+                    y_max = y
 
             self.set_plot_loc(x_min=x_min, x_max=x_max, y_min=y_min, y_max=y_max, node_lis=node_lis)
 
@@ -234,8 +223,9 @@ class GraphAlgo(GraphAlgoInterface, ABC):
         y_lis = []
         for i in self.graph.get_all_v().values():
             np = i.get_pos()
+            nid= i.get_key()
             ax.scatter(np[0], np[1], color="r", zorder=10)
-            # ax.annotate(i.get_key(), np[0], np[1])
+            ax.annotate(nid, (np[0], np[1]))
         for src in self.graph.get_all_v():
             for dest in self.graph.all_out_edges_of_node(src):
                 x1 = self.graph.get_node(src).get_pos()[0]
